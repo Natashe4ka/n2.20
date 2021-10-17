@@ -3,8 +3,8 @@
 
 int main() {
 
-    if (!AutoTest()) {
-        std::cout << "Autotests failed!\n";
+ if (!AutoTest()) {
+       std::cout << "Autotests failed!\n";
         return 0;
     }
     else {
