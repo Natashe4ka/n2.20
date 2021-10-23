@@ -76,7 +76,7 @@ void zip::unarchivator () {
     std::ofstream unzip_file (unarch_f.substr(0, unarch_f.find_last_of('\\')) + "\\new_" + str , std::ios_base::binary);
     //std::cout<< unarch_f.substr(0, unarch_f.find_last_of('\\')) + "\\new_" + str <<std::endl;
     std::fstream help_file (unarch_f.substr(0, unarch_f.find_last_of('\\'))+"\\h1.txt", std::ios_base::binary | std::ios_base::out);
-    int64_t get;
+    int64_t get=-1;
     int64_t first;
     file >> first ;
     
@@ -84,13 +84,20 @@ void zip::unarchivator () {
         if (file.eof()) break;
         file >> get;
         if (first == 0) {
-            std::string str (get, '0');
-
+            //std::string str (get, '0');
+            std::string str = "";
+            for(int64_t i = 0; i < get; i++){
+                str.push_back('0');
+            }
             help_file << str;
             first = 1;
         }
         else if (first == 1) {
-            std::string str (get, '1');
+            //std::string str (get, '1');
+            std::string str = "";
+            for(int64_t i = 0; i < get; i++){
+                str.push_back('1');
+            }
             help_file << str;
             first = 0;
         }
