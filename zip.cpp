@@ -14,7 +14,8 @@ int pow_(int n) {
         std::ofstream zip_file (out_file + "\\" + get_file_name(inp_file) + "_zip.myzip", std::ios_base::binary);//путь к файлу+ его новое имя
         //архиватор
         
-        if (!file) {
+ 
+		if (!file) {
             std::cout << "Error! Cannot open file!" << std::endl;
             return;
         }
@@ -42,7 +43,7 @@ int pow_(int n) {
 
         while (true) {
             if (help_file.eof()) {
-                zip_file << count-1 <<" ";
+                zip_file << count-1;
                 
                 break;
             }
@@ -60,7 +61,6 @@ int pow_(int n) {
         }
         help_file.close();
         remove((out_file + "\\" + "h.txt").c_str());
-
         file.close();
         zip_file.close();
     }
@@ -69,51 +69,47 @@ int pow_(int n) {
 
 void zip::unarchivator () {
     std::ifstream file (unarch_f, std::ios_base::binary);//to open all type of files in binary
-    //std::ofstream unzip_file (unarch_f.substr(0, unarch_f.find_last_of('_')), std::ios_base::binary);//путь к файлу+ его новое имя
-    //разархиватор
+  
     std::string str = unarch_f.substr(unarch_f.find_last_of('\\')+1, unarch_f.size());
     str = str.substr(0, str.find_last_of('_'));
     std::ofstream unzip_file (unarch_f.substr(0, unarch_f.find_last_of('\\')) + "\\new_" + str , std::ios_base::binary);
     //std::cout<< unarch_f.substr(0, unarch_f.find_last_of('\\')) + "\\new_" + str <<std::endl;
+
     std::fstream help_file (unarch_f.substr(0, unarch_f.find_last_of('\\'))+"\\h1.txt", std::ios_base::binary | std::ios_base::out);
-    int64_t get=-1;
+    int64_t get = -1;
     int64_t first;
     file >> first ;
     
     while (true) {
-        if (file.eof()) break;
+		if (file.eof()) {
+			break;
+		};
+
         file >> get;
+
         if (first == 0) {
-            //std::string str (get, '0');
-            std::string str = "";
-            for(int64_t i = 0; i < get; i++){
-                str.push_back('0');
-            }
-            help_file << str;
+			for (int64_t i = 0; i < get; i++) {
+				help_file << 0;
+			}
             first = 1;
         }
         else if (first == 1) {
-            //std::string str (get, '1');
-            std::string str = "";
-            for(int64_t i = 0; i < get; i++){
-                str.push_back('1');
-            }
-            help_file << str;
+			for (int64_t i = 0; i < get; i++) {
+				help_file << 1;
+			}
             first = 0;
         }
-
     }
-    
+  
     help_file.close();
     //work
-    
-    
-    help_file.open(unarch_f.substr(0, unarch_f.find_last_of('\\'))+"\\h1.txt", std::ios_base::binary | std::ios_base::in);//
+    help_file.open(unarch_f.substr(0, unarch_f.find_last_of('\\'))+"\\h1.txt", std::ios_base::binary | std::ios_base::in);
     help_file.seekg (0, std::ios::end);
     int64_t size = help_file.tellg(); //lenght
+	//size -= get;
     help_file.close();
     help_file.open(unarch_f.substr(0, unarch_f.find_last_of('\\'))+"\\h1.txt", std::ios_base::binary | std::ios_base::in);
-    size-=get;
+  
     
     char arr [8];
     int64_t num=0;
@@ -129,8 +125,6 @@ void zip::unarchivator () {
             num += pow_(7-q);
 
         }
-        
-        
         unzip_file << char(num);
         num=0;
     }
